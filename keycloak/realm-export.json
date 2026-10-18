@@ -1,0 +1,130 @@
+{
+  "realm": "ispm",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "clients": [
+    {
+      "clientId": "ispm-backend",
+      "name": "ISPM Backend",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "your-client-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "protocol": "openid-connect",
+      "redirectUris": ["http://localhost:3000/*"],
+      "webOrigins": ["http://localhost:3000"]
+    },
+    {
+      "clientId": "ispm-frontend",
+      "name": "ISPM Frontend",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:3000/*",
+        "http://localhost:3000"
+      ],
+      "webOrigins": ["http://localhost:3000"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      }
+    }
+  ],
+  "roles": {
+    "realm": [
+      { "name": "ADMIN", "description": "Администратор" },
+      { "name": "DIRECTOR", "description": "Директор" },
+      { "name": "DEPARTMENT_HEAD", "description": "Руководитель отдела" },
+      { "name": "OWNER", "description": "Владелец политики" },
+      { "name": "AUDITOR", "description": "Аудитор" },
+      { "name": "USER", "description": "Пользователь" }
+    ]
+  },
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@company.com",
+      "firstName": "Admin",
+      "lastName": "System",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Admin123!", "temporary": false }
+      ],
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "username": "director",
+      "enabled": true,
+      "email": "director@company.com",
+      "firstName": "Иван",
+      "lastName": "Директоров",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Password123!", "temporary": false }
+      ],
+      "realmRoles": ["DIRECTOR"]
+    },
+    {
+      "username": "depthead",
+      "enabled": true,
+      "email": "depthead@company.com",
+      "firstName": "Пётр",
+      "lastName": "Начальников",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Password123!", "temporary": false }
+      ],
+      "realmRoles": ["DEPARTMENT_HEAD"]
+    },
+    {
+      "username": "owner",
+      "enabled": true,
+      "email": "owner@company.com",
+      "firstName": "Ольга",
+      "lastName": "Владельцева",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Password123!", "temporary": false }
+      ],
+      "realmRoles": ["OWNER"]
+    },
+    {
+      "username": "auditor",
+      "enabled": true,
+      "email": "auditor@company.com",
+      "firstName": "Анна",
+      "lastName": "Аудиторова",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Password123!", "temporary": false }
+      ],
+      "realmRoles": ["AUDITOR"]
+    },
+    {
+      "username": "user1",
+      "enabled": true,
+      "email": "user1@company.com",
+      "firstName": "Мария",
+      "lastName": "Иванова",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Password123!", "temporary": false }
+      ],
+      "realmRoles": ["USER"]
+    }
+  ]
+}
