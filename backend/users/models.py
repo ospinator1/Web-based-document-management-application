@@ -1,12 +1,12 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
-from django.utils.translation import gettext as _
-from core.models import TimeStampedModel
 
 
-class UserGroup(TimeStampedModel):
+class UserGroup(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Название группы")
     description = models.TextField(blank=True, verbose_name="Описание")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
 
     class Meta:
         verbose_name = "Отделы"
@@ -16,7 +16,7 @@ class UserGroup(TimeStampedModel):
         return self.name
 
 
-class User(AbstractUser, TimeStampedModel):
+class User(AbstractUser):
     ROLE_CHOICES = [
         ('ADMIN', 'Администратор'),
         ('DIRECTOR', 'Директор'),
@@ -50,6 +50,9 @@ class User(AbstractUser, TimeStampedModel):
         blank=True,
         verbose_name='Права Django'
     )
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
 
     class Meta:
         verbose_name = "Пользователь"

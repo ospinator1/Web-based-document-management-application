@@ -21,11 +21,6 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'users',
-    'documents',
-    'tasks',
-    'reports',
-    'notifications',
-    'core',
     'keycloak_auth',
 ]
 
