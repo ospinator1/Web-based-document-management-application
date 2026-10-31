@@ -22,6 +22,7 @@ INSTALLED_APPS = [
 
     'users',
     'keycloak_auth',
+    'core',  # <--- ДОБАВЛЕНО (без него не работает TimeStampedModel)
 ]
 
 MIDDLEWARE = [

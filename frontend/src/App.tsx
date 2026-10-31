@@ -7,6 +7,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ForbiddenPage } from './pages/ForbiddenPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { EmployeesPage } from './pages/EmployeesPage';
 
 const App: React.FC = () => (
   <BrowserRouter>
@@ -18,32 +19,7 @@ const App: React.FC = () => (
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-        </Route>
-
-        <Route element={<ProtectedRoute roles={['DIRECTOR', 'ADMIN']} />}>
-          <Route
-            path="/director"
-            element={
-              <div className="container mt-4">
-                <h3>Панель директора</h3>
-                <p>Доступно только роли DIRECTOR и ADMIN.</p>
-              </div>
-            }
-          />
-        </Route>
-
-        <Route
-          element={<ProtectedRoute roles={['DEPARTMENT_HEAD', 'DIRECTOR', 'ADMIN']} />}
-        >
-          <Route
-            path="/department"
-            element={
-              <div className="container mt-4">
-                <h3>Панель отдела</h3>
-                <p>Доступно роли DEPARTMENT_HEAD и выше.</p>
-              </div>
-            }
-          />
+          <Route path="/employees" element={<EmployeesPage />} /> 
         </Route>
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />

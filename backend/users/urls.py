@@ -1,3 +1,6 @@
 from django.urls import path
+from .views import UserListCreateView
 
-urlpatterns = []
+urlpatterns = [
+    path('', UserListCreateView.as_view(), name='user-list'),
+]

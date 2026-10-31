@@ -3,6 +3,7 @@ name: ispm
 services:
   postgres:
     image: postgres:16-alpine
+    shm_size: 256mb
     environment:
       POSTGRES_DB: web_docs
       POSTGRES_USER: admin
@@ -11,11 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./keycloak/init-keycloak-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql
     healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'pg_isready -U admin -d web_docs',
-        ]
+      test: ['CMD-SHELL', 'pg_isready -U admin -d web_docs']
       interval: 5s
       timeout: 5s
       retries: 10
@@ -43,6 +40,11 @@ services:
       KC_HOSTNAME: http://localhost:8090
       KC_HTTP_ENABLED: 'true'
       KC_HEALTH_ENABLED: 'true'
+      KC_DB_POOL_INITIAL_SIZE: 5
+      KC_DB_POOL_MIN_SIZE: 5
+      KC_DB_POOL_MAX_SIZE: 50
+      KC_DB_POOL_MAX_LIFETIME: 600000
+      KC_DB_POOL_ACQUISITION_TIMEOUT: 30000
     ports:
       - '8090:8080'
     volumes:
@@ -56,6 +58,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/app
+      - ./keycloak:/keycloak  # <--- ДОБАВЛЕНА ЭТА СТРОКА
     ports:
       - '8000:8000'
     environment:

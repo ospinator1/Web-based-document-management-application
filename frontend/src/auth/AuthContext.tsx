@@ -32,28 +32,22 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const KEYCLOAK_INIT_OPTIONS = {
-  // Используем check-sso, чтобы не было принудительного редиректа на старте,
-  // но с корректной обработкой. Пользователь сам нажмет кнопку "Войти".
-  onLoad: 'check-sso' as const,
-  silentCheckSsoRedirectUri:
-    window.location.origin + '/silent-check-sso.html',
+  onLoad: 'login-required' as const,
   pkceMethod: 'S256' as const,
   checkLoginIframe: false,
-  // Важно: отключаем автоматический редирект, если нет сессии
-  enableLogging: true, // Включаем логи для отладки (можно убрать в продакшене)
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   
-  // Используем useRef, чтобы избежать повторной инициализации в StrictMode
   const initialized = useRef(false);
   const isLoggingIn = useRef(false);
 
   const loadProfile = useCallback(async (): Promise<void> => {
     if (!keycloak.authenticated || !keycloak.token) {
       setUser(null);
+      setLoading(false);
       return;
     }
     try {
@@ -63,11 +57,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       
       if (!res.ok) {
-        // Если токен невалиден, возможно, нужно обновить
         if (res.status === 401) {
           const refreshed = await keycloak.updateToken(30);
           if (refreshed) {
-            return loadProfile(); // Повторяем запрос с новым токеном
+            return loadProfile();
           }
         }
         throw new Error(`Profile fetch failed: ${res.status}`);
@@ -79,15 +72,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('Failed to load profile:', error);
       setUser(null);
-      // Если токен невалиден, разлогиниваем
       if (keycloak.authenticated) {
         await keycloak.logout({ redirectUri: window.location.origin + '/login' });
       }
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    // Защита от двойного вызова в React.StrictMode
     if (initialized.current) return;
     initialized.current = true;
 
@@ -96,29 +89,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initKeycloak = async () => {
       try {
         const authenticated = await keycloak.init(KEYCLOAK_INIT_OPTIONS);
-        
         if (cancelled) return;
 
         if (authenticated) {
-          // Настраиваем обновление токена
           keycloak.onTokenExpired = () => {
             keycloak.updateToken(30).catch(() => {
               console.error('Token refresh failed');
               keycloak.login();
             });
           };
-          
           await loadProfile();
         } else {
           setUser(null);
+          setLoading(false);
         }
       } catch (err) {
         console.error('Keycloak init failed:', err);
         setUser(null);
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
@@ -130,14 +118,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [loadProfile]);
 
   const login = useCallback(async (): Promise<void> => {
-    if (isLoggingIn.current) return; // Защита от повторных кликов
+    if (isLoggingIn.current) return;
     isLoggingIn.current = true;
     
     try {
-      // Указываем redirectUri, куда вернуться после успешного входа
       await keycloak.login({ 
         redirectUri: window.location.origin + '/dashboard',
-        // Можно добавить prompt: 'login', если нужно принудительно спрашивать пароль
       });
     } catch (error) {
       console.error('Login failed:', error);
@@ -153,7 +139,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     } catch (error) {
       console.error('Logout failed:', error);
-      // В случае ошибки просто перезагружаем страницу
       window.location.href = '/login';
     }
   }, []);

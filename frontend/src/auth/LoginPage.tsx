@@ -28,9 +28,6 @@ export const LoginPage: React.FC = () => {
       <div className="card shadow-sm" style={{ width: 400 }}>
         <div className="card-body p-4 text-center">
           <h3 className="mb-1">ISPM</h3>
-          <p className="text-muted mb-4" style={{ fontSize: 13 }}>
-            Система управления политиками ИБ
-          </p>
           <button className="btn btn-primary w-100" onClick={login}>
             Войти через Keycloak
           </button>

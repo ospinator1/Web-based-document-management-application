@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from users.serializers import UserSerializer
 
-
 class KeycloakProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

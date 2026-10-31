@@ -7,56 +7,18 @@ export const ProfilePage: React.FC = () => {
   if (!user) return null;
 
   return (
-    <div className="container mt-4" style={{ maxWidth: 720 }}>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h3 className="mb-0">Профиль пользователя</h3>
-        <Link to="/dashboard" className="btn btn-outline-secondary btn-sm">
-          ← На дашборд
-        </Link>
+    <div style={{ padding: '20px' }}>
+      <h3>Профиль</h3>
+      <Link to="/dashboard" style={{ marginBottom: '20px', display: 'inline-block' }}>Назад на главную</Link>
+      
+      <div style={{ lineHeight: '1.8' }}>
+        <p><strong>Логин:</strong> {user.username}</p>
+        <p><strong>Имя:</strong> {user.first_name} {user.last_name}</p>
+        <p><strong>Роль:</strong> {user.role}</p>
+        <p><strong>Отдел:</strong> {user.department || 'Не назначен'}</p>
       </div>
 
-      <div className="card">
-        <div className="card-body">
-          <dl className="row mb-0">
-            <dt className="col-sm-4">Логин</dt>
-            <dd className="col-sm-8">{user.username}</dd>
-
-            <dt className="col-sm-4">Имя</dt>
-            <dd className="col-sm-8">
-              {user.first_name} {user.last_name}
-            </dd>
-
-            <dt className="col-sm-4">Email</dt>
-            <dd className="col-sm-8">{user.email || '—'}</dd>
-
-            <dt className="col-sm-4">Роль</dt>
-            <dd className="col-sm-8">
-              <span className="badge bg-primary">{user.role}</span>
-            </dd>
-
-            <dt className="col-sm-4">Отдел</dt>
-            <dd className="col-sm-8">{user.department || '—'}</dd>
-
-            <dt className="col-sm-4">Должность</dt>
-            <dd className="col-sm-8">{user.position || '—'}</dd>
-
-            <dt className="col-sm-4">Роли Keycloak</dt>
-            <dd className="col-sm-8">
-              {user.realmRoles.length ? (
-                user.realmRoles.map((r) => (
-                  <span key={r} className="badge bg-secondary me-1 mb-1">
-                    {r}
-                  </span>
-                ))
-              ) : (
-                '—'
-              )}
-            </dd>
-          </dl>
-        </div>
-      </div>
-
-      <button className="btn btn-outline-danger mt-3" onClick={logout}>
+      <button onClick={logout} style={{ marginTop: '20px', padding: '5px 15px' }}>
         Выйти
       </button>
     </div>

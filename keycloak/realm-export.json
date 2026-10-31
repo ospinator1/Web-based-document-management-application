@@ -10,6 +10,9 @@
   "accessTokenLifespan": 300,
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
+  "internationalizationEnabled": true,
+  "supportedLocales": ["ru"],
+  "defaultLocale": "ru",
   "clients": [
     {
       "clientId": "ispm-backend",
@@ -31,16 +34,10 @@
       "publicClient": true,
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": false,
-      "implicitFlowEnabled": false,
       "protocol": "openid-connect",
-      "redirectUris": [
-        "http://localhost:3000/*",
-        "http://localhost:3000"
-      ],
+      "redirectUris": ["http://localhost:3000/*"],
       "webOrigins": ["http://localhost:3000"],
-      "attributes": {
-        "pkce.code.challenge.method": "S256"
-      }
+      "attributes": { "pkce.code.challenge.method": "S256" }
     }
   ],
   "roles": {
@@ -48,83 +45,98 @@
       { "name": "ADMIN", "description": "Администратор" },
       { "name": "DIRECTOR", "description": "Директор" },
       { "name": "DEPARTMENT_HEAD", "description": "Руководитель отдела" },
-      { "name": "OWNER", "description": "Владелец политики" },
-      { "name": "AUDITOR", "description": "Аудитор" },
-      { "name": "USER", "description": "Пользователь" }
+      { "name": "USER", "description": "Сотрудник" }
     ]
   },
+  "groups": [
+    { "name": "HR" },
+    { "name": "Sales" },
+    { "name": "Finance" },
+    { "name": "DocumentFlow" },
+    { "name": "IT" }
+  ],
   "users": [
     {
-      "username": "admin",
-      "enabled": true,
-      "email": "admin@company.com",
-      "firstName": "Admin",
-      "lastName": "System",
-      "emailVerified": true,
-      "credentials": [
-        { "type": "password", "value": "Admin123!", "temporary": false }
-      ],
+      "username": "admin", "enabled": true, "email": "admin@company.com",
+      "firstName": "Admin", "lastName": "System", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Admin123!", "temporary": false }],
       "realmRoles": ["ADMIN"]
     },
     {
-      "username": "director",
-      "enabled": true,
-      "email": "director@company.com",
-      "firstName": "Иван",
-      "lastName": "Директоров",
-      "emailVerified": true,
-      "credentials": [
-        { "type": "password", "value": "Password123!", "temporary": false }
-      ],
+      "username": "director", "enabled": true, "email": "director@company.com",
+      "firstName": "Иван", "lastName": "Директоров", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
       "realmRoles": ["DIRECTOR"]
     },
     {
-      "username": "depthead",
-      "enabled": true,
-      "email": "depthead@company.com",
-      "firstName": "Пётр",
-      "lastName": "Начальников",
-      "emailVerified": true,
-      "credentials": [
-        { "type": "password", "value": "Password123!", "temporary": false }
-      ],
-      "realmRoles": ["DEPARTMENT_HEAD"]
+      "username": "hr_head", "enabled": true, "email": "hr_head@company.com",
+      "firstName": "Елена", "lastName": "Петрова", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["DEPARTMENT_HEAD"],
+      "groups": ["HR"]
     },
     {
-      "username": "owner",
-      "enabled": true,
-      "email": "owner@company.com",
-      "firstName": "Ольга",
-      "lastName": "Владельцева",
-      "emailVerified": true,
-      "credentials": [
-        { "type": "password", "value": "Password123!", "temporary": false }
-      ],
-      "realmRoles": ["OWNER"]
+      "username": "hr_user", "enabled": true, "email": "hr_user@company.com",
+      "firstName": "Мария", "lastName": "Сидорова", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["USER"],
+      "groups": ["HR"]
     },
     {
-      "username": "auditor",
-      "enabled": true,
-      "email": "auditor@company.com",
-      "firstName": "Анна",
-      "lastName": "Аудиторова",
-      "emailVerified": true,
-      "credentials": [
-        { "type": "password", "value": "Password123!", "temporary": false }
-      ],
-      "realmRoles": ["AUDITOR"]
+      "username": "sales_head", "enabled": true, "email": "sales_head@company.com",
+      "firstName": "Алексей", "lastName": "Смирнов", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["DEPARTMENT_HEAD"],
+      "groups": ["Sales"]
     },
     {
-      "username": "user1",
-      "enabled": true,
-      "email": "user1@company.com",
-      "firstName": "Мария",
-      "lastName": "Иванова",
-      "emailVerified": true,
-      "credentials": [
-        { "type": "password", "value": "Password123!", "temporary": false }
-      ],
-      "realmRoles": ["USER"]
+      "username": "sales_user", "enabled": true, "email": "sales_user@company.com",
+      "firstName": "Дмитрий", "lastName": "Волков", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["USER"],
+      "groups": ["Sales"]
+    },
+    {
+      "username": "fin_head", "enabled": true, "email": "fin_head@company.com",
+      "firstName": "Ольга", "lastName": "Кузнецова", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["DEPARTMENT_HEAD"],
+      "groups": ["Finance"]
+    },
+    {
+      "username": "fin_user", "enabled": true, "email": "fin_user@company.com",
+      "firstName": "Анна", "lastName": "Попова", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["USER"],
+      "groups": ["Finance"]
+    },
+    {
+      "username": "doc_head", "enabled": true, "email": "doc_head@company.com",
+      "firstName": "Сергей", "lastName": "Соколов", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["DEPARTMENT_HEAD"],
+      "groups": ["DocumentFlow"]
+    },
+    {
+      "username": "doc_user", "enabled": true, "email": "doc_user@company.com",
+      "firstName": "Павел", "lastName": "Лебедев", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["USER"],
+      "groups": ["DocumentFlow"]
+    },
+    {
+      "username": "it_head", "enabled": true, "email": "it_head@company.com",
+      "firstName": "Иван", "lastName": "Козлов", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["DEPARTMENT_HEAD"],
+      "groups": ["IT"]
+    },
+    {
+      "username": "it_user", "enabled": true, "email": "it_user@company.com",
+      "firstName": "Артем", "lastName": "Новиков", "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "Password123!", "temporary": false }],
+      "realmRoles": ["USER"],
+      "groups": ["IT"]
     }
   ]
 }
